@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using First_Step_API.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace First_Step_API.Controllers
 {
@@ -12,6 +13,12 @@ namespace First_Step_API.Controllers
         public IActionResult CreateOrEditJobPosting(int id)
         {
             return View();
+        }
+
+        public IActionResult CreateEditJob(JobPosting jobPosting)
+        {
+            // write jobposting to db
+            return RedirectToAction("Index");
         }
     }
 }
