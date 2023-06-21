@@ -8,5 +8,10 @@ namespace First_Step_API.Controllers
         {
             return View();
         }
+
+        public IActionResult CreateOrEditJobPosting(int id)
+        {
+            return View();
+        }
     }
 }
