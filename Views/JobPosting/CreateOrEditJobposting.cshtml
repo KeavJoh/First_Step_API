@@ -3,7 +3,7 @@
     ViewData["Title"] = "Inserat erstellen/bearbeiten";
 }
 
-<form asp-controller="JobPosting" asp-action="CreateEditJob">
+<form asp-controller="JobPosting" asp-action="CreateEditJob" enctype="multipart/form-data">
     <div class="card">
 
         <div class="card-header">
@@ -58,6 +58,12 @@
                     <input class="form-control" asp-for="ContactMail" type="email" placeholder="E-Mail Adresse" />
                 </div>
             </div>
+
+            <div class="mb-3">
+                <label class="form-label">Bild</label>
+                <input class="form-control-file" name="file" type="file" id="formFile">
+            </div>
+
 
 
         </div>

@@ -15,8 +15,18 @@ namespace First_Step_API.Controllers
             return View();
         }
 
-        public IActionResult CreateEditJob(JobPosting jobPosting)
+        public IActionResult CreateEditJob(JobPosting jobPosting, IFormFile file)
         {
+            // convert image to bytes
+            if (file != null)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    file.CopyTo(ms);
+                    var bytes = ms.ToArray();
+                    jobPosting.CompanyImage = bytes;
+                }
+            }
             // write jobposting to db
             return RedirectToAction("Index");
         }
