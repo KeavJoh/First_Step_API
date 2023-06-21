@@ -27,7 +27,10 @@ namespace First_Step_API.Controllers
                     jobPosting.CompanyImage = bytes;
                 }
             }
+
             // write jobposting to db
+
+
             return RedirectToAction("Index");
         }
     }
