@@ -13,5 +13,6 @@
         public string ContactMail { get; set; }
         public string ContactWebsite { get; set; }
         public byte[] CompanyImage { get; set; }
+        public string OwnerUsername { get; set; }
     }
 }

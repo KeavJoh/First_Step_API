@@ -15,16 +15,31 @@ namespace First_Step_API.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var jobPostingFromDb = _context.JobPostings.Where(x => x.OwnerUsername == User.Identity.Name).ToList();
+            return View(jobPostingFromDb);
         }
 
         public IActionResult CreateOrEditJobPosting(int id)
         {
+            if (id != null)
+            {
+                var jobPostingFromDb = _context.JobPostings.SingleOrDefault(x => x.Id == id);
+
+                if (jobPostingFromDb != null)
+                {
+                    return View(jobPostingFromDb);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
             return View();
         }
 
         public IActionResult CreateEditJob(JobPosting jobPosting, IFormFile file)
         {
+            jobPosting.OwnerUsername = User.Identity.Name;
             // convert image to bytes
             if (file != null)
             {
@@ -61,6 +76,7 @@ namespace First_Step_API.Controllers
                 jobFromDb.CompanyName = jobPosting.CompanyName;
                 jobFromDb.JobDescription = jobPosting.JobDescription;
                 jobFromDb.JobLocation = jobPosting.JobLocation;
+                jobFromDb.OwnerUsername = jobPosting.OwnerUsername;
             }
 
             _context.SaveChanges();
