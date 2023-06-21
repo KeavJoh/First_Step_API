@@ -12,7 +12,7 @@ namespace First_Step_API.Controllers
         {
             _context = context;
         }
-
+         
         public IActionResult Index()
         {
             var jobPostingFromDb = _context.JobPostings.Where(x => x.OwnerUsername == User.Identity.Name).ToList();
@@ -72,7 +72,7 @@ namespace First_Step_API.Controllers
                 jobFromDb.ContactMail = jobPosting.ContactMail;
                 jobFromDb.ContactWebsite = jobPosting.ContactWebsite;
                 jobFromDb.JobTitle = jobPosting.JobTitle;
-                jobFromDb.CompanyImage = jobPosting.CompanyImage;
+                //jobFromDb.CompanyImage = jobPosting.CompanyImage;
                 jobFromDb.CompanyName = jobPosting.CompanyName;
                 jobFromDb.JobDescription = jobPosting.JobDescription;
                 jobFromDb.JobLocation = jobPosting.JobLocation;
@@ -83,6 +83,26 @@ namespace First_Step_API.Controllers
 
             // write jobposting to db
 
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteJobPosting(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var jobPostingFromDb = _context.JobPostings.FirstOrDefault(x => x.Id == id);
+
+            if (jobPostingFromDb == null)
+            {
+                return NotFound();
+            }
+
+            _context.JobPostings.Remove(jobPostingFromDb);
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }
