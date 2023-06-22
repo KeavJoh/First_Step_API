@@ -21,7 +21,7 @@ namespace First_Step_API.Controllers
 
         public IActionResult CreateOrEditJobPosting(int id)
         {
-            if (id != null)
+            if (id != 0)
             {
                 var jobPostingFromDb = _context.JobPostings.SingleOrDefault(x => x.Id == id);
 
