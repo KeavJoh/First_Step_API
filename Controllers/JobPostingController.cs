@@ -1,9 +1,11 @@
 ﻿using First_Step_API.Data;
 using First_Step_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace First_Step_API.Controllers
 {
+    [Authorize]
     public class JobPostingController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +27,11 @@ namespace First_Step_API.Controllers
             {
                 var jobPostingFromDb = _context.JobPostings.SingleOrDefault(x => x.Id == id);
 
+                if (jobPostingFromDb.OwnerUsername != User.Identity.Name)
+                {
+                    return Unauthorized();
+                }
+
                 if (jobPostingFromDb != null)
                 {
                     return View(jobPostingFromDb);
@@ -40,6 +47,7 @@ namespace First_Step_API.Controllers
         public IActionResult CreateEditJob(JobPosting jobPosting, IFormFile file)
         {
             jobPosting.OwnerUsername = User.Identity.Name;
+
             // convert image to bytes
             if (file != null)
             {
@@ -72,7 +80,7 @@ namespace First_Step_API.Controllers
                 jobFromDb.ContactMail = jobPosting.ContactMail;
                 jobFromDb.ContactWebsite = jobPosting.ContactWebsite;
                 jobFromDb.JobTitle = jobPosting.JobTitle;
-                //jobFromDb.CompanyImage = jobPosting.CompanyImage;
+                jobFromDb.CompanyImage = jobPosting.CompanyImage;
                 jobFromDb.CompanyName = jobPosting.CompanyName;
                 jobFromDb.JobDescription = jobPosting.JobDescription;
                 jobFromDb.JobLocation = jobPosting.JobLocation;
