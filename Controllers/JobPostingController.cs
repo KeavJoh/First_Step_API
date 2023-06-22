@@ -87,7 +87,8 @@ namespace First_Step_API.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult DeleteJobPosting(int id)
+        [HttpPost]
+        public IActionResult DeleteJobPostingById(int id)
         {
             if (id == 0)
             {
@@ -104,7 +105,7 @@ namespace First_Step_API.Controllers
             _context.JobPostings.Remove(jobPostingFromDb);
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return Ok();
         }
     }
 }

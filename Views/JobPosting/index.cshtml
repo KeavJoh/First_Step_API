@@ -29,7 +29,7 @@
                     <td>@jobPosting.CompanyName</td>
                     <td>
                         <a class="btn btn-warning" asp-route-id="@jobPosting.Id" asp-controller="JobPosting" asp-action="CreateOrEditJobPosting">Bearbeiten</a>
-                        <a class="btn btn-danger" asp-route-id="@jobPosting.Id" asp-controller="JobPosting" asp-action="DeleteJobPosting">Löschen</a>
+                        <button onclick="onClickedDeleteButton(@jobPosting.Id)" class="btn btn-danger">Löschen</button>
                     </td>
                 </tr>
             }
@@ -43,5 +43,33 @@
         $(document).ready(function () {
             $('#jobPostingTable').DataTable();
         });
-    </script>
+
+        function onClickedDeleteButton(id) {
+            Swal.fire({
+                title: 'Soll das Inserat unwiederruflich Gelöscht werden?',
+                showDenyButton: true,
+                denyButtonText: 'Inserat löschen',
+                confirmButtonText: 'Abbrechen',
+            }).then((result) => {
+                if (result.isDenied) {
+
+                    // Backend call to delete job posting by id
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("DeleteJobPostingById")",
+                        data: {id: id},
+                        success: function (msg) {
+                            Swal.fire('Inserat gelöscht', '', 'success').then((result) => {
+                                location.reload();
+                            })
+                        },
+                        error: function (msg) {
+                            Swal.fire('Das hat leider nicht geklappt', '', 'error')
+                        }
+
+                    });
+                }
+            })
+        }
+       </script>
 }
