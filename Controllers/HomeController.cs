@@ -18,8 +18,7 @@ namespace First_Step_API.Controllers
 
         public IActionResult Index()
         {
-            var allJobPostings = _context.JobPostings.ToList();
-            return View(allJobPostings);
+            return View();
         }
 
         public IActionResult Privacy()
@@ -49,6 +48,21 @@ namespace First_Step_API.Controllers
             }
 
             return Ok(jobPostingFromDb);
+        }
+
+        public IActionResult GetJobPostingsPartial(string query)
+        {
+            List<JobPosting> jobPostings = new List<JobPosting>();
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                jobPostings = _context.JobPostings.ToList();
+            } else
+            {
+                jobPostings = _context.JobPostings.Where(x => x.JobTitle.ToLower().Contains(query.ToLower())).ToList();
+            }
+
+            return PartialView("_JobPostingListPartial", jobPostings);
         }
     }
 }
