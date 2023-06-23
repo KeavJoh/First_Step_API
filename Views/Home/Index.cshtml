@@ -31,15 +31,60 @@
     @{
         foreach (JobPosting jobPosting in Model)
         {
-            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+            <a href="#" onclick="showModal(@jobPosting.Id)" data-bs-toggle="modal" class="list-group-item list-group-item-action" aria-current="true">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">@jobPosting.JobTitle</h5>
                     <small>@jobPosting.JobLocation</small>
                 </div>
                 <p class="mb-1">@jobPosting.CompanyName</p>
-                <small>@jobPosting.ContactWebsite</small>
+                <small>Start: @jobPosting.StartDate.ToShortDateString()</small>
             </a>
         }
     }
 
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalJobPosting" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalTitle">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <img id="modalImage" class="img-fluid" src=""/>
+                <div id="modalDescription"></div>
+                <hr />
+                <div id="modalName"></div>
+                <div id="modalMail"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function showModal(id) {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("GetJobPosting")",
+                data: { id: id },
+                success: function (data) {
+
+                    // data binding
+                    $('#modalImage').attr('src', `data:image/png;base64,${data.companyImage}`);
+                    $('#modalTitle').text(data.jobTitle);
+                    $('#modalDescription').text(data.jobDescription);
+                    $('#modalName').text(data.companyName);
+                    $('#modalMail').text(data.contactMail);
+                    // call modal to show
+                    $('#modalJobPosting').modal('show')
+                }
+
+            });
+        }
+    </script>
+}
